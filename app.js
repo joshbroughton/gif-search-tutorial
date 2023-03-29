@@ -1,6 +1,8 @@
 // Require Libraries
 const express = require('express');
 const exphbs = require('express-handlebars');
+require('dotenv').config();
+
 
 // App Setup
 const app = express();
@@ -15,8 +17,21 @@ app.set('views', './views')
 // Routes
   // ROUTES
   app.get('/', (req, res) => {
-    console.log(req.query)
-    res.render('home')
+    term = '';
+    if (req.query.term) {
+      term = req.query.term;
+    }
+    //
+    const key = process.env.KEY;
+    console.log(key)
+    const limit = 10;
+    const url = 'https://tenor.googleapis.com/v2/search?q='+ term + '&key=' + key + '&limit=' + limit
+    fetch(url)
+      .then((response) => response.json())
+      .then((data) => {
+        gifs = data.results
+        res.render('home', { gifs })
+      }).catch(console.error);
   })
 
 app.get('/greetings/:name', (req, res) => {
