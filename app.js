@@ -6,7 +6,7 @@ require('dotenv').config();
 
 // App Setup
 const app = express();
-
+app.use(express.static('public'));
 // Middleware
 
 
